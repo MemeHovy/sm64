@@ -526,6 +526,9 @@ s8 is_point_close_to_object(struct Object *obj, f32 x, f32 y, f32 z, s32 dist) {
  * Sets an object as visible if within a certain distance of Mario's graphical position.
  */
 void set_object_visibility(struct Object *obj, s32 dist) {
+    if (obj->isFlickering)
+        return;
+
     f32 objX = obj->oPosX;
     f32 objY = obj->oPosY;
     f32 objZ = obj->oPosZ;
@@ -634,6 +637,8 @@ s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
         return FALSE;
     }
 
+    obj->isFlickering = TRUE;
+
     if (obj->oTimer < lifeSpan + 40) {
         if (obj->oTimer % 2 != 0) {
             obj->header.gfx.node.flags |= GRAPH_RENDER_INVISIBLE;
@@ -642,8 +647,10 @@ s8 obj_flicker_and_disappear(struct Object *obj, s16 lifeSpan) {
         }
     } else {
         obj->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        obj->isFlickering = FALSE;
         return TRUE;
     }
+    obj->isFlickering = FALSE;
 
     return FALSE;
 }

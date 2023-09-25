@@ -149,8 +149,9 @@ struct Object {
     /*0x070*/ u32 collidedObjInteractTypes;
     /*0x074*/ s16 activeFlags;
     /*0x076*/ s16 numCollidedObjs;
-    /*0x078*/ struct Object *collidedObjs[4];
-    /*0x088*/
+    /*0x078*/ bool isFlickering = false;
+    /*0x080*/ struct Object *collidedObjs[4];
+    /*0x090*/
     union {
         // Object fields. See object_fields.h.
         u32 asU32[0x50];
